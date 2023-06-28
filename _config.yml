@@ -23,7 +23,7 @@ title: I Think So! # the main title
 tagline: 천하제일 개발자를 향해 # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
-  A minimal, responsive and feature-rich Jekyll theme for technical writing.
+  발전을 꿈꾸는 사람입니다. 아직 잘하지는 못하지만, 조금씩 앞으로 나아가려고 노력 중입니다.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: 'https://redcarrot1.github.io'
@@ -89,8 +89,8 @@ comments:
     shortname: # fill with the Disqus shortname. › https://help.disqus.com/en/articles/1717111-what-s-a-shortname
   # utterances settings › https://utteranc.es/
   utterances:
-    repo: # <gh-username>/<repo>
-    issue_term: # < url | pathname | title | ...>
+    repo: #redcarrot1/redcarrot1.github.io # <gh-username>/<repo>
+    issue_term: #pathname # < url | pathname | title | ...>
   # Giscus options › https://giscus.app
   giscus:
     repo: # <gh-username>/<repo>
