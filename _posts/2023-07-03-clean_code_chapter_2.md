@@ -6,11 +6,10 @@ tags:
   [
     clean code,
   ]
-img_path: /assets/img/etc/aws_hacking/
 ---
 ### 의도를 분명히 밝혀라
 - 변수, 함수, 클래스는 존재 이유, 수행 기능, 사용 방법을 주석 없이 이름만으로도 파악할 수 있어야 한다.
-- 예시1: 이름 `d`는 아무 의미도 드러나지 않는다. 주석없이, 측정하려는 값과 단위를 표현하는 이름이 필요하다.
+- 예시1: `int d`는 아무 의미도 드러나지 않는다. 주석없이, 측정하려는 값과 단위를 표현하는 이름이 필요하다.
   ```java
   // Bad
   int d; // 경과 시간(단위: 날짜)
@@ -284,4 +283,4 @@ public class GuessStatisticsMessage {
 
 ### 불필요한 맥락을 없애라
 - `Gas Station Deluxe`라는 애플리케이션을 만든다고 해서, 모든 클래스 이름 앞에 `GSD`를 붙이는 것은 좋지 않다.
-- `accoundAddress`와 `customerAddress`는 `Address` 클래스의 인스턴스로는 좋은 이름이 아니다.
+- `accountAddress`와 `customerAddress`는 `Address` 클래스의 인스턴스로는 좋은 이름이 아니다.
