@@ -137,7 +137,7 @@ public class ReporterConfig {
 
 ## 가로 공백과 밀집도
 - 가로로는 공백을 사용해 밀접한 개념과 느슨한 개념을 표현한다.
-- 예를 들어, 할당(`=`) 시에는 equal 얖뒤에 공백을 준다.
+- 예를 들어, 할당(`=`) 시에는 equal 앞뒤에 공백을 준다.
 	- `int lineSize = line.length();`
 - 반면, 함수 이름과 이어지는 괄호 사이에는 공백을 넣지 않는다.(+ 인자 사이의 쉼표 뒤에는 공백을 넣는다.)
 	- `lineWidthHistogram.addLine(lineSize, lineCount);`
