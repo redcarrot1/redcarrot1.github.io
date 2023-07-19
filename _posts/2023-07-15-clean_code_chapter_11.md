@@ -14,9 +14,9 @@ img_path: /assets/img/clean_code/
 
 ```java
 public Service getService() {
-    if (service == null)
-        service = new MyServiceImpl(...);
-    return service;
+  if (service == null)
+    service = new MyServiceImpl(...);
+  return service;
 }
 ```
 
@@ -124,7 +124,6 @@ public class TimeInvocationHandler implements InvocationHandler {
     long startTime = System.currentTimeMillis();
 
     Object result = method.invoke(target, args);
-
 
     long endTime = System.currentTimeMillis();
     long resultTime = endTime - startTime;
