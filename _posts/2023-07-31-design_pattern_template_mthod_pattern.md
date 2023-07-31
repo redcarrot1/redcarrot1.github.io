@@ -92,7 +92,7 @@ public class templateMethod1 extends AbstractTemplate {
 
 
 
-## 익명 내부 클래스를 사용
+## 익명 내부 클래스 이용
 - `SubClassLogic1`, `SubClassLogic2`처럼 구현 클래스를 계속 만들어야 하는 단점이 있다.
 - **해결 방법: 익명 내부 클래스를 사용**
 - 익명 내부 클래스를 사용하면 객체 인스턴스를 생성하면서 동시에 생성할 클래스를 상속 받은 자식 클래스를 정의할 수 있다.
