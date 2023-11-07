@@ -519,7 +519,7 @@ i {
   background: var(--img-bg);
 
   &::before {
-    content: '';
+    //content: '';
     position: absolute;
     background: var(--shimmer-bg);
     height: 100%;
