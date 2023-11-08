@@ -45,6 +45,11 @@
         </li>
         <!-- .nav-item -->
       {% endfor %}
+      <li class="nav-item">
+        <a href="https://hits.seeyoufarm.com">
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fredcarrot1.github.io&count_bg=%23000000&title_bg=%23000000&icon=openstreetmap.svg&icon_color=%23FFFFFF&title=Visitors&edge_flat=false" alt="error"/>
+        </a>
+      </li>
     </ul>
   </nav>
 
@@ -61,10 +66,14 @@
 
     {% for entry in site.data.contact %}
       {% case entry.type %}
-        {% when 'github', 'twitter' %}
+        {% when 'github' %}
           {%- capture url -%}
-            https://{{ entry.type }}.com/{{ site[entry.type].username }}
-          {%- endcapture -%}
+           https://{{ entry.type }}.com/{{ site[entry.type].username }}
+         {%- endcapture -%}
+       {% when 'twitter' %}
+        {%- capture url -%}
+          https://www.instagram.com/hong._taek/
+        {%- endcapture -%}
         {% when 'email' %}
           {% assign email = site.social.email | split: '@' %}
           {%- capture url -%}
