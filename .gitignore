@@ -18,5 +18,5 @@ package-lock.json
 .idea
 .vscode
 
-
-.DS_Store
+# Misc
+assets/js/dist
