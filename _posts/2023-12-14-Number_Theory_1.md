@@ -6,7 +6,6 @@ tags:
   [
     암호학, cryptography
   ]
-img_path: /assets/img/etc/kupc/
 math: true
 ---
 
