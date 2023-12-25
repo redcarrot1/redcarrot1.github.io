@@ -1,0 +1,137 @@
+---
+title: Modular
+date: 2023-12-25 10:00:00 +09:00
+categories: [암호학]
+tags:
+  [
+    암호학, cryptography
+  ]
+math: true
+img_path: /assets/img/cryptography/
+---
+
+
+## Modular Arithmetic and Equivalence Classes
+
+### Definition
+> $b\equiv a \mod m \iff m\|(b-a)$
+
+- 모듈러 합동(Modular Congruent)을 $b\equiv a$와 같이 표현하는 경우가 대부분이나, 본 암호학 시리즈에서는 모두 $=$ 기호로 통일하겠습니다.
+- 예시) $10+5=8$ mod 7
+  - 10과 5는 7로 나눴을 때 나머지가 같다.
+    
+### Some Theorems (Equivalence Relation)
+1. $a=a \mod m$
+2. If $a=b\mod m$, then $b=a \mod m$
+3. If $a=b \mod m$ and $b=c \mod m$, then $a=c \mod m$
+    - (정의에 의해) $m\|(b-a), m\|(c-a)$이므로 $b-a=km, c-b=k'm$로 표현할 수 있다.
+    - 두 식을 더하면 $c-a=(k+k')m$. 따라서 $a=c \mod m$이다.
+
+### Why modular arithmetic?
+1. 모듈러 시스템에서 나누기 대신 역원 곱하기로 바꿀 수 있다.
+2. 정수를 곱하기 하면 수가 너무 커진다. 실용적이지 않음. 계속 나머지를 취하면 크기 제한 가능
+
+
+<br>
+
+## Modular Conservation
+- Theorem (+, -, *, constant multiplication conserved)
+- if $a=b$ mod $m$ and $c=d$ mod $m$ then
+  - $a+c=b+d$  mod $m$
+  - $a-c=b-d$  mod $m$
+  - $ac=bd$ mod $m$
+- Theorem (constant addition and exponentiation)
+  - $a+k=b+k$ mod $m$
+  - $ak=bk$ mod $m$
+  - $a^k=b^k$ mod $m$
+
+<br>
+
+## Residue System and Meaning
+
+- Complete Residue System - 나머지만 생각하는 시스템
+    - $Z_m=\lbrace 0, 1, 2, \dots, m-1\rbrace$
+- Addition and Subtraction well-defined
+    - $a\in Z_m$
+    - $-a=m-a$
+    - $m-a+a=0$
+    - 뺄셈은 덧셈의 역원을 더하는 것
+    - 덧셈의 역원은 더해서 0이 되는것(항등원)
+    - 따라서 $a$의 역원은 $m-a$ → 뺄셈이 정의됨
+
+<br>
+
+## Theorem
+
+> $ka=kb \mod m$ and $gcd(k, m)=1$, then $a=b \mod m$
+
+- $ka=kb \mod m$에서 $k$를 무조건 땔 수 있는건 아니다.
+    - 예를 들어, $k=m$이거나 $k=0$이면 땔 수 없다.
+
+> 만약 $gcd(k, m)\ne1$ 라면 $k$는 곱셈의 역원이 없다.
+
+- $gcd(k,m)=d>1$
+- $k*k^{-1}=1$을 만족하는 $k^{-1}$이 있다고 가정하자
+- $k*k^{-1} =1 \mod m$ 이 가능할까?
+- $gcd(k, m)=d \rightarrow k, m$은 $d$의 배수이다.
+- $k*k^{-1}$은 $d$의 배수, $m$도 $d$의 배수이므로 나머지도 반드시 $d$의 배수여야 한다.
+- 따라서 $k*k^{-1} =1 \mod m$ 은 불가능하다.
+
+<br>
+
+## Reduced Residue System
+- $Z^*_m= \lbrace a\|gcd(a, m)=1, a\in Z_m \rbrace$
+  - 역원이 항상 존재함. 즉, 곱하기와 나누기가 모두 정의가 가능한 시스템
+- $a, b \in Z^*_m$ 이면 $a*b\in Z^*_m$ 이다.
+  - $gcd(a, m)=1, gcd(b, m)=1$ 이면 $gcd(a*b, m)=1$이므로
+- 더하기 빼기는 불가능함
+    - 중간 빠진 원소가 존재하므로
+- Complete Residue System : $Z_m=\lbrace 0, 1, 2, \dots, m-1 \rbrace$
+    - 덧셈, 뺄셈, 곱셈 가능
+- Reduced Residue System : $Z^*_m= \lbrace a\|gcd(a, m)=1, a\in Z_m \rbrace$
+    - 곱셈, 나눗셈 가능
+
+<br>
+
+## $Z^*_m$  : What if $m$ is a Prime?
+- Field : 더하기, 빼기, 곱하기, 나누기가 잘 되는 시스템
+  - 예를 들어, 유리수와 실수 시스템은 Field이다.
+- $Z^*_m= \lbrace a\|gcd(a, m)=1\rbrace=\lbrace 1, 2, \dots, m-1\rbrace$
+- $Z_m=\lbrace 0, 1, 2, \dots, m-1\rbrace=Z^*_m \cup \{0\}$
+  - $Z_m$은 덧셈, 뺄셈 가능
+  - $Z^*_m$ 은 곱셈, 뺄셈 가능
+- 따라서 $Z_m$은 (finite) Field이다.
+
+<br>
+
+## Euler Theorem
+
+> If $a\in Z_m^{\*}$ then $a^{\varphi(m)}=1 \mod m$. 이때 $\varphi(m)=\|Z_m{^\*}\|$
+
+- $a^1, a^2, a^2, \cdots \mod m$ 은 결국 사이클이 생김
+    - $Z^*_m$가 유한하기 때문에 비둘기집 원리로 인해 중복 원소가 나온다.
+- $a^k=a^{k+l}$ 이 반드시 발생함. 이때 $a^l=1 \mod m$ 이다.
+- Example $m=7$
+    - $Z^*_m=\lbrace 1, 2, 3, 4, 5, 6 \rbrace$
+    - 특징: $a^{\varphi(m)}$은 반드시 1 이어야하기 때문에, 중간에 1이 나온다면 $a^{\varphi(m)의 약수}$ 이다.(사이클로 인해)
+    
+![](1.png)
+    
+- 증명
+  - $Z_m^{\*}=\lbrace b_1,b_2, \cdots, b_{\varphi(m)} \rbrace$
+  - $aZ_m^{\*}=\lbrace ab_1,ab_2, \dots, ab_{\varphi(m)} \rbrace$, $a\in Z_m^{\*}$
+      - 집합 원소는 모두 다르다.
+      - 또한 모든 원소는 $Z^{\*}_m$의 원소이다. - 곱셈에 대해 닫혀있음
+  - 따라서 $Z^{\*}_m=aZ^{\*}_m$이다.
+  - $b_1\times b_2\times\dots \times b_{\varphi(m)}=b_1\times b_2\times\dots \times b_{\varphi(m)}\times a^{\varphi(m)}$
+  - 따라서 $a^{\varphi(m)}=1$ 이다.
+
+- 오일러 피 함수 특징
+  - if Prime $p$ then $\varphi(p) = p-1$
+  - if Prime $p, q$ then $\varphi(pq) = \varphi(p)\times\varphi(q)=(p-1)(q-1)$
+  - 증명은 [여기](https://dimenchoi.tistory.com/52) 블로그를 참고해주세요.
+
+## Fermat Theorem
+if $p$ is a Prime and $a\in Z^*_p$ then $a^{p-1}=1$ mod $p$
+
+- 오일러 정리에서 $a$가 소수인 특별한 케이스
