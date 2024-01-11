@@ -7,7 +7,6 @@ tags:
     암호학, cryptography
   ]
 math: true
-img_path: /assets/img/cryptography/
 ---
 
 ## Zero Knowledge Proof
