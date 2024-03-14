@@ -10,7 +10,7 @@ img_path: /assets/img/etc/redis_sorted_set/
 ---
 
 ## Intro
-서버에서 랭킹 시스템 또는 다중 검색어 서비스를 만들 때 어떤 방식을 사용하시나요?<br>
+서버에서 랭킹 시스템을 만들 때 어떤 방식을 사용하시나요?<br>
 가장 먼저 생각나는건 RDB를 사용해서 Score 테이블의 데이터를 group by로 더한 후 정렬하는 방식입니다.<br>
 하지만 테이블이 엄청나게 크다고 가정합시다. 이 데이터들을 쿼리하는데 많은 부하가 걸린다는 것은 쉽게 예측할 수 있습니다.<br>
 다른 우회적 해결 방법으로는 유저마다 'totalScore'라는 컬럼을 추가해서 해결하는 방법도 있겠네요.<br>
@@ -238,7 +238,16 @@ void 저장안된_value이면_null이_반환된다() {
 ```
 ZSET에 저장되지 않은 member을 조회하면 null이 반환됩니다. 이 부분은 예외처리해주시면 됩니다. 회원가입할 때 0점으로 세팅하는 방법도 있겠네요.
 
-## 참고자료
-https://www.youtube.com/watch?v=mPB2CZiAkKM&ab_channel=%EC%9A%B0%EC%95%84%ED%95%9C%ED%85%8C%ED%81%AC
+## 성능비교
+![](2.png){: width="400" height="" }
 
-https://redis.io/docs/data-types/sorted-sets/#operating-on-ranges
+위와 같이 구성된 시스템이 있다고 가정하겠습니다. User와 Score는 1:N 관계를 가집니다.<br>
+User는 300, Score는 15,000개 데이터로 테스트하였습니다. (제가 제작 중인 서비스의 예측 데이터 개수 기준입니다.)
+
+![](3.png){: width="800" height="" }
+
+평균적으로 RDB는 57.6 ms, Redis는 7.6 ms의 속도를 보였습니다. redis가 약 7.6배 빠른 결과가 나왔습니다.
+
+## 참고자료
+[Youtube: 우아한레디스](https://www.youtube.com/watch?v=mPB2CZiAkKM&ab_channel=%EC%9A%B0%EC%95%84%ED%95%9C%ED%85%8C%ED%81%AC) <br>
+[redis docs](https://redis.io/docs/data-types/sorted-sets/#operating-on-ranges)

@@ -60,7 +60,7 @@ Spring이 제공하는 애노테이션을 사용하면 json 파싱 및 메시지
 **이러한 객체를 Service가 의존해야할까요?**
 
 ## Example
-새롭게 Spring boot 프로젝트를 생성하겠습니다.
+새롭게 Spring boot 프로젝트를 생성하겠습니다. <br>
 [깃허브에서 프로젝트 보기](https://github.com/redcarrot1/presentation-dependency)<br>
 
 **Dependencies**
