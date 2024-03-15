@@ -242,11 +242,18 @@ ZSET에 저장되지 않은 member을 조회하면 null이 반환됩니다. 이 
 ![](2.png){: width="400" height="" }
 
 위와 같이 구성된 시스템이 있다고 가정하겠습니다. User와 Score는 1:N 관계를 가집니다.<br>
-User는 300, Score는 15,000개 데이터로 테스트하였습니다. (제가 제작 중인 서비스의 예측 데이터 개수 기준입니다.)
+User 수를 늘려가면서 테스트를 진행했습니다. 각 User 당 Score는 10개입니다.
+
+비교 대상은 3개입니다.
+1. Score 테이블 이용 (`select .. from score group by user_id order by sum(value) desc limit 100`)
+2. User 테이블의 totalScore 필드 이용 (`select .. from user order by user.total_score desc limit 100`)
+3. Redis Sorted Sets 이용
 
 ![](3.png){: width="800" height="" }
 
-평균적으로 RDB는 57.6 ms, Redis는 7.6 ms의 속도를 보였습니다. redis가 약 7.6배 빠른 결과가 나왔습니다.
+데이터의 개수가 증가할수록 RDB를 이용한 방법은 실행 시간이 증가했습니다.
+하지만 Redis는 상당히 일정한 속도를 유지하는 것을 확인할 수 있습니다.
+대규모 데이터를 다룰수록 그 차이는 더 유의미할 것으로 예상됩니다.
 
 ## 참고자료
 [Youtube: 우아한레디스](https://www.youtube.com/watch?v=mPB2CZiAkKM&ab_channel=%EC%9A%B0%EC%95%84%ED%95%9C%ED%85%8C%ED%81%AC) <br>
