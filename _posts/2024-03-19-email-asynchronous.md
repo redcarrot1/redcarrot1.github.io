@@ -57,7 +57,7 @@ context.setVariable("code", authenticationCode);
 String content = templateEngine.process("mail-template", context);
 ```
 
-한 가지 중요한 이슈는, 저의 프론트 실력입니다.
+한 가지 중요한 이슈는 저의 프론트 실력입니다.
 열심히 땅을 파며, (제 눈에는 이쁜) 웹 프론트를 만들었습니다.
 ![](4.png){: width="700" height="" }
 _이쁘죠?(강요)_
