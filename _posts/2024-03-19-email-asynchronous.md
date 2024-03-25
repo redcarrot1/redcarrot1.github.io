@@ -6,7 +6,7 @@ tags:
   [
     asynchronous, thymleaf
   ]
-img_path: /assets/img/etc/email_asynchronous/
+img_path: /assets/img/playkuround/email_asynchronous/
 ---
 
 ## Intro
