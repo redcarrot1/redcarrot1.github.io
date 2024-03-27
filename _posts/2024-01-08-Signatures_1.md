@@ -63,14 +63,20 @@ img_path: /assets/img/cryptography/
 
 ### Which Classical Systems are Alive
 - Substitution - 단순 문자 치환
+    - 카이사르 암호(Caesar cipher)
     - Change Letters by Rule, A→C, B→T, C→Q, …
     - Easily broken
 - Exchange
+    - 단일 문자 대응 암호(monoalphabetic cipher)
     - Change Location by Rule, ABCDEF->CAEDFB
     - Easily broken
+        - 문자 e와 t가 많이 등장한다는 점, 특정 단어(in, the 등)이 쌍으로 자주 등장한다는 점, 메시지의 내용을 짐작..
+        - 여러 정보를 이용하면 쉽게 깨질 수 있다.
 - Substitution + Exchange 조합
+    - 블록 암호(block cipher): 메시지를 k비트 블록으로 쪼개어, 각 블록을 암호화
     - Not broken yet → Feistel Cryptosystem and Variants
-    - DES(56bit), **AES(256bit)**, IDEA, …
+    - DES(Data Encryption Standard, 56bit), **AES(Advanced Encryption Standard, 256bit)**, IDEA, …
+    - NIST에 따르면, 56비트 DES를 1초에 깰 수 있는 기계로 128비트 AES 키를 깨려면 149조 년이 걸림
 
 
 <br>
