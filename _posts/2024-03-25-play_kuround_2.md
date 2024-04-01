@@ -1,10 +1,10 @@
 ---
-title: "[playkuround] 행사 후기와 기능 업데이트"
+title: "[playkuround] 행사 후기와 v2.0.4 버전 업데이트"
 date: 2024-03-25 10:00:00 +09:00
 categories: [playkuround]
 tags:
   [
-    asynchronous, thymleaf
+    version update
   ]
 img_path: /assets/img/playkuround/update2/
 ---
