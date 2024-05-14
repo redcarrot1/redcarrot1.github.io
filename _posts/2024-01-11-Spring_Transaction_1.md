@@ -4,7 +4,7 @@ date: 2024-01-11 10:00:00 +09:00
 categories: [Spring-boot]
 tags:
   [
-    Spring, Transaction
+    spring, Transaction
   ]
 img_path: /assets/img/spring_transaction/
 ---
