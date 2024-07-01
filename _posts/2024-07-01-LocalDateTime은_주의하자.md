@@ -196,8 +196,10 @@ void findPostsAfter12hoursAgo() {
             .containsExactly(tuple(post.getId(), post.getTitle(), post.getContent()));
 }
 ```
-참고로 BaseTimeEntity에 값이 수정되는 시점은 `@PrePersist`, `@PreUpdate` 에 의해 결정됩니다. (`AuditingEntityListener` 내부에 해당 애노테이션들이 사용됩니다.) 관련 내용은 [하이버네이트 공식 문서](https://docs.jboss.org/hibernate/orm/6.5/userguide/html_single/Hibernate_User_Guide.html#events-jpa-callbacks)를 참고해주세요.
+BaseTimeEntity에 값이 수정되는 시점은 `@PrePersist`, `@PreUpdate` 에 의해 결정됩니다. (`AuditingEntityListener` 내부에 해당 애노테이션들이 사용됩니다.) 관련 내용은 [하이버네이트 공식 문서](https://docs.jboss.org/hibernate/orm/6.5/userguide/html_single/Hibernate_User_Guide.html#events-jpa-callbacks)를 참고해주세요.
 
+우리가 자유롭게 제어할 수 없는 필드에 의존하는건 좋은 방식이 아닌것 같습니다. 또한 JPA가 아닌 다른 기술을 사용하게 된다면 해당 코드들을 모두 수정해야하는 일이 발생합니다.<br>
+따라서 createAt, updateAt은 참고용으로 사용하고 실제 로직은 별도의 필드로 분리하여 우리가 직접 제어하는게 좋다고 생각합니다.
 
 
 ## Outro
