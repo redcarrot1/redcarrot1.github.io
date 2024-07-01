@@ -4,7 +4,7 @@ date: 2024-07-01 10:00:00 +09:00
 categories: [Spring]
 tags:
   [
-    java, Spring, LocalDateTime, LocalDate
+    java, Spring, LocalDateTime, LocalDate, JpaAuditing
   ]
 ---
 

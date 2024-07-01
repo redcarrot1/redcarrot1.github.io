@@ -1,7 +1,7 @@
 ---
-title: Redis Sorted Sets (with Spring-boot)
+title: Redis Sorted Sets (with Spring)
 date: 2023-12-23 10:00:00 +09:00
-categories: [Spring-boot]
+categories: [Spring]
 tags:
   [
     Redis

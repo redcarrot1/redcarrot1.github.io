@@ -1,10 +1,10 @@
 ---
 title: Presentation과 Business layer의 의존성
 date: 2024-03-12 10:00:00 +09:00
-categories: [Spring-boot]
+categories: [Spring]
 tags:
   [
-    layered-architecture, dependency
+    Layered-architecture, Dependency
   ]
 img_path: /assets/img/etc/presentation_dependency/
 ---

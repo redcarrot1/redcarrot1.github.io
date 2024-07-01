@@ -1,7 +1,7 @@
 ---
 title: Java - Dynamic proxy
 date: 2024-01-15 10:00:00 +09:00
-categories: [Spring-boot]
+categories: [Java]
 tags:
   [
     Java, Dynamic proxy, CGLIB

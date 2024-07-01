@@ -1,10 +1,10 @@
 ---
 title: Spring Transaction 1
 date: 2024-01-11 10:00:00 +09:00
-categories: [Spring-boot]
+categories: [Spring]
 tags:
   [
-    spring, Transaction
+    Spring, Transaction
   ]
 img_path: /assets/img/spring_transaction/
 ---
