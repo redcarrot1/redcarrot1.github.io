@@ -213,3 +213,22 @@ void strategyV3() {
   context.execute(() -> log.info("비즈니스 로직1 실행"));
 }
 ```
+
+### 자바에서 사용하는 전략패턴 예시
+정렬 기준으로 `Comparator` 구현체를 인자로 넣을 수 있다.
+`Comparator`은 `@FunctionalInterface` 이기 때문에 람다표현식으로 바꿀 수 있다.
+
+```java
+List<String> list = Arrays.asList("z", "x", "spring", "java");
+
+Collections.sort(list, new Comparator<String>() {
+            // 인자로 전략을 넘겨줌
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.length() - o2.length();
+            }
+        });
+        
+// 람다 표현식
+Collections.sort(list, (o1, o2) -> o1.length() - o2.length());
+```
