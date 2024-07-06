@@ -10,7 +10,22 @@ img_path: /assets/img/spring_transaction/
 ---
 
 ## 스프링 트랜잭션 추상화
-데이터 접근 기술들은 트랜잭션을 처리하는 코드 자체가 다르다. 예를 들면, JDBC와 JPA는 트랜잭션을 사용하는 코드가 다르다.<br>
+데이터 접근 기술들은 트랜잭션을 처리하는 코드 자체가 다르다. 아래는 JPA와 JDBC의 트랜잭션 코드 예시이다.
+
+```java
+// JPA 트랜잭션
+EntityTransaction txn = entityManager.getTransaction();
+txn.begin();
+...
+txn.commit();
+
+// JDBC 트랜잭션
+Connection con = ...
+con.setAutoCommit(false);
+...
+con.commit();
+```
+
 데이터 접근 기술을 바뀐다면 트랜잭션 관련 코드를 개발자가 모두 수정해야 한다. 스프링은 이런 문제를 해결하기 위해 `PlatformTransactionManager` 인터페이스를 만들어 트랜잭션 코드를 추상화했다.<br>
 해당 인터페이스의 구현체는 스프링 부트가 데이터 접근 기술을 자동으로 인식해서 적절한 구현체를 빈으로 등록시켜준다. 따라서 개발자는 `PlatformTransactionManager` 인터페이스만 잘 알고있으면 된다.
 
@@ -147,6 +162,45 @@ public void rollbackFor() throws Exception {
     throw new Exception();
 }
 ```
+
+## CF. TransactionTemplate
+스프링에서는 [전략 패턴](https://redcarrot1.github.io/posts/design_pattern_strategy_pattern/) 중 특별한 케이스인 템플릿 콜백 패턴을 많이 사용한다. 트랜잭션 처리를 편리하게 도와주는 `TransactionTemplate` 도 전략패턴으로 구현되어 있다.<br>
+```java
+PlatformTransactionManager transactionManager = ...;
+
+TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager); // 템플릿
+transactionTemplate.execute(status -> { // 콜백
+            orderRepository.save(order);
+            return order;
+        }
+);
+```
+코드 내부에서는 인자로 주어진 콜백 메서드를 실행하게 된다.
+```java
+// TransactionTemplate.java
+public <T> T execute(TransactionCallback<T> action) throws TransactionException {
+    ...
+    TransactionStatus status = this.transactionManager.getTransaction(this);
+    T result;
+    try {
+        result = action.doInTransaction(status);
+    }
+    catch (RuntimeException | Error ex) {
+        // Transactional code threw application exception -> rollback
+        rollbackOnException(status, ex);
+        throw ex;
+    }
+    catch (Throwable ex) {
+        // Transactional code threw unexpected exception -> rollback
+        rollbackOnException(status, ex);
+        throw new UndeclaredThrowableException(ex, "TransactionCallback threw undeclared checked exception");
+    }
+    this.transactionManager.commit(status);
+    return result;
+}
+
+```
+
 
 ## Reference
 [김영한 스프링 DB 2편 - 데이터 접근 활용 기술](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-db-2)
