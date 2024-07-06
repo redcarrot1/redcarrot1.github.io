@@ -28,6 +28,16 @@ con.commit();
 
 데이터 접근 기술을 바뀐다면 트랜잭션 관련 코드를 개발자가 모두 수정해야 한다. 스프링은 이런 문제를 해결하기 위해 `PlatformTransactionManager` 인터페이스를 만들어 트랜잭션 코드를 추상화했다.<br>
 해당 인터페이스의 구현체는 스프링 부트가 데이터 접근 기술을 자동으로 인식해서 적절한 구현체를 빈으로 등록시켜준다. 따라서 개발자는 `PlatformTransactionManager` 인터페이스만 잘 알고있으면 된다.
+```java
+public interface PlatformTransactionManager extends TransactionManager {
+    TransactionStatus getTransaction(@Nullable TransactionDefinition definition) throws TransactionException;
+
+    void commit(TransactionStatus status) throws TransactionException;
+
+    void rollback(TransactionStatus status) throws TransactionException;
+}
+
+```
 
 ![](1.png)
 
@@ -43,6 +53,7 @@ con.commit();
 - 애플리케이션 코드(비즈니스 로직)이 트랜잭션 코드와 강하게 결합되기 때문에 주로 사용되지 않는다.
 
 ```java
+// TransactionTemplate을 사용하는 방법도 존재한다. (맨 아래 cf 참고)
 TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition()); // 트랜잭션 시작
 try {
     //비즈니스 로직
@@ -203,4 +214,5 @@ public <T> T execute(TransactionCallback<T> action) throws TransactionException 
 
 
 ## Reference
-[김영한 스프링 DB 2편 - 데이터 접근 활용 기술](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-db-2)
+[김영한 스프링 DB 2편 - 데이터 접근 활용 기술](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-db-2)<br>
+[토비의 스프링 6 - 이해와 원리](https://www.inflearn.com/course/%ED%86%A0%EB%B9%84%EC%9D%98-%EC%8A%A4%ED%94%84%EB%A7%816-%EC%9D%B4%ED%95%B4%EC%99%80-%EC%9B%90%EB%A6%AC)
