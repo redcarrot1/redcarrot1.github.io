@@ -146,6 +146,44 @@ static method의 mocking 자체를 안티패턴으로 보는 경우가 많습니
 1. **test 코드가 복잡해진다.**
 2. 자원 할당, 해제해야 한다. (차선책으로 try-with-resources 사용)
 
+### Ver 4 (내용 추가)
+Clock을 빈으로 등록하여 목킹하는 방법도 있습니다. 자바의 LocalDateTime은 아래와 같이 구현되어 있습니다.
+```java
+// LocalDateTime.java
+public static LocalDateTime now() {
+    return now(Clock.systemDefaultZone());
+}
+
+public static LocalDateTime now(Clock clock) {
+    Objects.requireNonNull(clock, "clock");
+    final Instant now = clock.instant();
+    ZoneOffset offset = clock.getZone().getRules().getOffset(now);
+    return ofEpochSecond(now.getEpochSecond(), now.getNano(), offset);
+}
+```
+따라서 비즈니스 로직에서는 Clock을 bean으로 주입받은 후, `LocalDateTime.now(clock)` 을 사용하면 됩니다.<br>
+테스트 코드에서는 고정된 clock을 빈으로 등록하는 testConfig을 작성하거나, mockBean(또는 spyBean)으로 사용하면 됩니다. clock을 사용하는 메서드는 아래를 참고해주세요
+```java
+// 스프링 컨테이너에 빈으로 등록
+@Bean
+public Clock clock() {
+    return Clock.systemDefaultZone();
+}
+
+// Clock을 이용해서 LocalDateTime 생성하기
+LocalDateTime now = LocalDateTime.now(clock);
+
+// 시간 고정
+Clock clock = Clock.fixed(Instant.now(), ZoneId.systemDefault());
+
+// 시간 조정하기
+Clock clock = Clock.offset(clock, Duration.of(30, ChronoUnit.MINUTES));
+
+// SpyBean으로 등록 후 clock.instant 목킹
+given(clock.instant())
+        .willReturn(Instant.parse("2024-07-07T00:00:00Z"));
+```
+
 
 ## JpaAuditing을 비즈니스 로직에서 의존하지 말자
 일반적으로 엔티티를 저장하는 시점이나 수정 시점을 컬럼에 추가하여 함께 저장합니다. 많은 분이 아래 코드를 작성해 보셨을 겁니다.
@@ -204,7 +242,7 @@ BaseTimeEntity에 값이 수정되는 시점은 `@PrePersist`, `@PreUpdate` 에 
 
 ## Outro
 테스트 코드는 문서이기도 합니다. 읽는 사람이 머릿속으로 로직을 분석하며 읽게 하는 것보다는, 심플하고 직관적으로 작성하는게 좋습니다.
-이런 이유로 테스트 코드에서 given 절이 길어지고 중복 코드가 발생해도 복잡하게 분리하지 않는 경우도 많습니다.
+이런 이유로 테스트 코드에서 given 절이 길어지고 중복 코드가 발생해도 복잡하게 분리하지 않는 경우가 많습니다.
 
 애플리케이션이 복잡해질수록 테스트 코드는 중요해지는 것 같습니다. 특히 기능 수정이나 리팩토링에서 테스트 코드가 갖는 힘은 대단합니다. 처음에는 시간 낭비인 것 같지만, 결국에는 가장 빠른 길입니다.<br>
-보통 사이드 프로젝트는 기능 수정할 일이 많지 않습니다. 일회성이 크기 때문입니다. 지속적으로 운영되는 서비스를 만들어보셨다면 테스트가 주는 힘을 경험하셨으리라 생각합니다. 고맙다 테스트야! 를 외치며 포스팅을 마무리합니다.
+보통 사이드 프로젝트는 기능 수정할 일이 많지 않습니다. 일회성이 크기 때문입니다. 지속적으로 운영되는 서비스를 만들어보셨다면 테스트가 주는 힘을 경험하셨으리라 생각합니다. 고맙다 테스트야.
