@@ -27,15 +27,19 @@ tags:
 6. Certificate
 - 제작 중
 
-7. Digital Envelope
+7. Symmetric key Algorithm
+- DES, AES, 3DES
 - 제작 중
 
-8. Cryptographic Protocols
+8. Digital Envelope
+- 제작 중
+
+9. Cryptographic Protocols(not required)
 - Massey-Omura, Secret Sharing, Bit Commitment, Bitcoin, Zero Knowledge, Blind Signature
 - 제작 중
 
-9. HTTP와 TLS
+10. HTTP와 TLS
 - [https://redcarrot1.github.io/posts/HTTPS_TLS](https://redcarrot1.github.io/posts/HTTPS_TLS/){:target="_blank"}
 
-10. Future Cryptography
+11. Future Cryptography(not required)
 - [https://redcarrot1.github.io/posts/Future_Cryptography](https://redcarrot1.github.io/posts/Future_Cryptography/){:target="_blank"}
