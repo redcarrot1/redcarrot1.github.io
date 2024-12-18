@@ -10,6 +10,9 @@ math: true
 img_path: /assets/img/cryptography/
 ---
 
+RSA, Diffie-Hellman, ElGamal은 공개키 암호 시스템 자체로도 사용되지만, 대칭키 암호 시스템에서 키 교환을 위해서도 많이 사용됩니다.<br>
+특히 최근 TLS에서는 타원곡선을 이용한 Diffie-Hellman(ECDHE)를 많이 사용합니다.
+
 ## Discrete Log Problem
 ### Generator
 > if $Z_n^{\*}=\lbrace g, g^2, \dots, g^{\varphi(n)}(=1)\rbrace$, then $g$ is a Generator of $Z_n^{\*}$
@@ -24,7 +27,7 @@ If $g$ is a generator of $Z_n^{\*}$, then the equation $g^x ≡ g^y \mod n$ hold
 ### Discrete Log Problem
 > Given $n, g, x$, find $k$ such that $g^k=x \mod n$
 {: .prompt-tip }
-여기서 $n$이 소수이고, $g$이 $Z_n^{\*}$의 generator라면 $g^1, g^2, g^3, \dots, g^{p-1}$은 모두 다른 값이 된다. 따라서 식을 만족하는 $k$를 찾기 매우 힘듦.
+여기서 $n$이 소수이고, $g$이 $Z_n^{\*}$의 generator라면 $g^1, g^2, g^3, \dots, g^{n-1}$은 모두 다른 값이 된다. 따라서 식을 만족하는 $k$를 찾기 매우 힘듦.
 
 한쪽은 계산하기 어렵고, 반대 방향은 계산하기 쉬운 함수를 one-way function이라고 한다.<br>
 DL Problem에서 $n, g, k$가 주어지면 $x$를 찾는 건 쉽지만, $n, g, x$가 주어질 때 $k$를 찾는건 어렵다.<br>
@@ -67,12 +70,12 @@ DL Problem은 $NP \cap co-NP$ 문제로 알려져있다.
 
 ![](3.png)
 
-- Bob(Sender) computes:
+- Sender computes:
     - Random $k$
         - $k$ is relatively prime to $p-1$
-    - Send $(g^k \mod p, mg^{ak} \mod p)$ to Alice
-- Alice(Receiver) computes:
+    - Send $(g^k \mod p, mg^{ak} \mod p)$
+- Receiver computes:
     - Create $(g^k)^a=g^{ak} \mod p$
-        - $A$는 $a$를 가지고 있으므로 구할 수 있다.
+        - $A$는 $a$를 가지고 있으므로 계산할 수 있다.
     - Calculate $(g^{ak})^{-1} \mod p$
     - Decryption: $mg^{ak}(g^{ak})^{-1}=m \mod p$
