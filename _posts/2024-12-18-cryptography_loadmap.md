@@ -25,7 +25,7 @@ tags:
 - [https://redcarrot1.github.io/posts/Signatures](https://redcarrot1.github.io/posts/Signatures/){:target="_blank"}
 
 6. Certificate
-- 제작 중
+- [https://redcarrot1.github.io/posts/certificate](https://redcarrot1.github.io/posts/certificate/){:target="_blank"}
 
 7. Symmetric key Algorithm
 - DES, AES, 3DES
