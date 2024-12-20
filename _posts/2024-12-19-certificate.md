@@ -1,6 +1,6 @@
 ---
 title: "Certificate"
-date: 2024-12-18 10:00:00 +09:00
+date: 2024-12-19 10:00:00 +09:00
 categories: [암호학]
 tags:
   [
@@ -104,4 +104,5 @@ Notation: Verify(signature verify key, target certificate)
   - MS OS, Mozila Firefox, Naver Whale
 - macOS에서 확인하기
   - '키체인 접근 → 시스템루트 → 인증서'에서 확인 가능
+  
 ![](20.png){: width="400" height="" }

@@ -27,9 +27,9 @@ tags:
 6. Certificate
 - [https://redcarrot1.github.io/posts/certificate](https://redcarrot1.github.io/posts/certificate/){:target="_blank"}
 
-7. Symmetric key Algorithm
+7. Symmetric key cryptography
 - DES, AES, 3DES
-- 제작 중
+- [https://redcarrot1.github.io/posts/symmetric_key_cryptography](https://redcarrot1.github.io/posts/symmetric_key_cryptography/){:target="_blank"}
 
 8. Digital Envelope
 - 제작 중
