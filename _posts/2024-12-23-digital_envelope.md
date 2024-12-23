@@ -30,7 +30,7 @@ Step3. 이제 $A$가 $B$에게 $(K', C)$를 보낸다.
 
 Step4. $B$는 개인키를 이용해 $K$를 얻은 후, $C$를 AES 복호화해서 $m$을 얻는다.
 
-Step5. 이후부터는 메시지를 대칭키(k)를 이용해 암호화하여 전송
+Step5. 이후부터는 메시지를 대칭키($k$)를 이용해 암호화하여 전송
 
 - **RSA encrypts only the Key for AES**
   - key exchange

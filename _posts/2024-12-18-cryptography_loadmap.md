@@ -32,7 +32,7 @@ tags:
 - [https://redcarrot1.github.io/posts/symmetric_key_cryptography](https://redcarrot1.github.io/posts/symmetric_key_cryptography/){:target="_blank"}
 
 8. Digital Envelope
-- 제작 중
+- [https://redcarrot1.github.io/posts/digital_envelope](https://redcarrot1.github.io/posts/digital_envelope/)
 
 9. Cryptographic Protocols(not required)
 - Massey-Omura, Secret Sharing, Bit Commitment, Bitcoin, Zero Knowledge, Blind Signature
