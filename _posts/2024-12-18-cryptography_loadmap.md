@@ -32,11 +32,11 @@ tags:
 - [https://redcarrot1.github.io/posts/symmetric_key_cryptography](https://redcarrot1.github.io/posts/symmetric_key_cryptography/){:target="_blank"}
 
 8. Digital Envelope
-- [https://redcarrot1.github.io/posts/digital_envelope](https://redcarrot1.github.io/posts/digital_envelope/)
+- [https://redcarrot1.github.io/posts/digital_envelope](https://redcarrot1.github.io/posts/digital_envelope/){:target="_blank"}
 
 9. Cryptographic Protocols(not required)
 - Massey-Omura, Secret Sharing, Bit Commitment, Bitcoin, Zero Knowledge, Blind Signature
-- 제작 중
+- [https://redcarrot1.github.io/posts/cryptographic_protocols](https://redcarrot1.github.io/posts/cryptographic_protocols/){:target="_blank"}
 
 10. HTTP와 TLS
 - [https://redcarrot1.github.io/posts/HTTPS_TLS](https://redcarrot1.github.io/posts/HTTPS_TLS/){:target="_blank"}
