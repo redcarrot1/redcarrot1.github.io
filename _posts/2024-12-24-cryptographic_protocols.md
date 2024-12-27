@@ -90,7 +90,138 @@ img_path: /assets/img/cryptography/
 <br>
 
 ## Bitcoin
-- 추가 예정
+- 여기서는 비트코인의 기술인 블록체인에 중점을 두어 살펴봅니다.
+    - 세부적인 디테일은 현재 거래되는 비트코인과 다를 수 있습니다.
+- Java를 이용하여 Blockchain 기술을 이해하시고자 하는 분은 아래 사이트를 참고해주세요.
+    - [Part1](https://medium.com/programmers-blockchain/create-simple-blockchain-java-tutorial-from-scratch-6eeed3cb03fa)
+    - [Part2](https://medium.com/programmers-blockchain/creating-your-first-blockchain-with-java-part-2-transactions-2cdac335e0ce)
+    - [번역본 Part1](https://brunch.co.kr/@chunja07/41)
+    - [번역본 Part2](https://brunch.co.kr/@chunja07/42)
+
+### 거래 (transaction)
+- A가 B에게 비트코인을 이체
+    - 코인은 ‘실제 돈’이 아니라, ‘A가 B에게 이체를 했다라는 사실 증명들의 체인’이다.
+- A는 **“Hash(이전 거래내역들의 체인 + 현재 거래내역 + B의 공개키)”**을 **A의 개인키**로 전자서명 생성
+    - 사용자 인증
+    - 거래 내역의 위조 불가능성
+- P2P 서버에 broadcast
+
+```java
+public class Wallet {
+
+    public PrivateKey privateKey;
+    public PublicKey publicKey;
+
+    public Map<String, TransactionOutput> UTXOs; // 지갑에 담긴 미사용 transaction
+    ...
+}
+```
+
+![](28.png){: width="500" height="" }
+
+- Transaction chain
+    - 예를 들어, 100 비트를 전송하고자 한다면
+    - 50btc가 담겨있는 있는 transaction, 30btc가 담겨있는 있는 transaction, 30btc가 담겨있는 있는 transaction
+    - 위 3개의 transaction이 모여서 1개의 transaction과 남은 차액(10btc)이 담긴 transaction이 생성된다.
+
+![](32.jpeg){: width="700" height="" }
+_https://en.bitcoin.it/wiki/File:Bitcointransactions.JPG_
+
+```java
+public class Transaction {
+
+    public String transactionId; // Contains a hash of transaction
+    public PublicKey sender;     // Senders address/public key.
+    public PublicKey reciepient; // Recipients address/public key.
+    public float value;          // Contains the amount we wish to send to the recipient.
+    public byte[] signature;     // This is to prevent anybody else from spending funds in our wallet.
+
+    public List<String> inputs;  // 이 거래를 만들기 위한 트랜잭션들
+    public List<String> outputs; // 이 거래 이후에 만들어진 트랜잭션들
+    ...
+}
+```
+
+### Proof of Work (작업 증명)
+
+- 특정 단위로, P2P에 broadcasting된 모든 거래내역들을 모아서 하나의 block을 생성
+- 현재까지 생성된 모든 Block들에 대한 **chained-timestamp** 생성
+    - Block : 일정 시간 동안 발생한 모든 transaction
+    - **Blockchain**
+- 작업 증명(Proof of Work): 새로운 block에 대한 해시 값을 찾아내는 작업
+    - hash(데이터 + 랜덤값) = 특정 조건을 가진 값
+    - **채굴(mining): 작업 증명을 수행 하는 과정**
+        - ‘랜덤값’은 무작위 대입하면서 찾자 → 땅을 파자 → 채굴
+- 작업 증명이 끝나야 트랜잭션들을 묶어 새로운 block을 만들고 채이닝 할 수 있다. → 누가 작업 증명을 할건데? → incentive를 지급하자 = 비트코인
+    - 한 블록에 대한 작업 증명이 완료되어야, 실제 블록 내에 포함된 모든 거래에 대한 이체가 완료됨
+    - 그래서 비트코인 전송시간은 대략 10분 이상 걸린다.
+- 새로운 block에 대한 해시 값을 찾아낸 사람만이 chained-timestamp 생성 가능
+    - 누구나 작업 증명에 참여할 수 있지만, 최초로 작업 증명을 끝낸 사람이 chained-timestamp 생성
+    - 작업 증명을 끝낸 최초의 사용자에게 **incentive** 지급
+        - 새로운 비트 코인 발행: 중앙은행이 아닌 채굴자가 화폐 제조 및 발행 (화폐 제조 권한이 분산)
+        - 사용자들로 하여금 작업 증명에 능동적 참여 유도
+
+- **블록 해시의 조건: 앞자리 18자리가 모두 0이어야 함**
+    - **Hash(이전 블록의 해시 값 + 현재 블록의 거래 내역들 + Nonce)**
+    - 채굴 = Nonce를 찾는 과정
+    - 수행한 결과 앞자리 18비트가 모두 0으로 채워져야 함
+        - 난이도에 따라 다름
+    - Nonce를 먼저 찾는 사람이 성공!
+        - hash 함수의 특성상 output을 보고 input을 추정하기 힘들다.
+        - 따라서 일반적으로 브루트포스 방식으로 Nonce를 대입해본다.
+
+```java
+public class Block {
+
+    public String hash;         // 예를 들어, SAH(previousHash + timeStamp + nonce + merkleRoot)
+    public String previousHash; // for Block chain!!
+    public String merkleRoot;
+    public List<Transaction> transactions;
+    public long timeStamp;
+    public int nonce;           // 이 값을 찾기 위해 채굴 과정이 필요함
+    ...
+}
+```
+
+### Merkel Tree
+![](33.png){: width="700" height="" }
+_https://en.wikipedia.org/wiki/Merkle_tree_
+
+- 2개씩 묶어 새로운 Hash 생성. 최종적으로 1개의 Root Hash(merkleRoot) 생성
+    - 이때 중간에 만들어졌던 중간 해쉬값들도 모두 Block에 저장한다.(option)
+- 트랜잭션 검증하기
+    1. 트랜잭션의 전자서명을 통해 ‘어떤 사람’이 만들었다는 인증 수행
+    2. 해당 트랜잭션에서 만든 해쉬와, 나머지 중간 해쉬값들을 이용해 Root Hash를 계산한다.
+    3. Block Hash를 계산 후 비교
+- 왜 트랜잭션 자체를 저장하지 않고, 중간의 Hash 값만 Block에 저장하나요?
+    - 트랜잭션은 사이즈가 너무 크다. (전자서명 등 여러가지가 들어있음)
+    - Hash 값은 고정된 크기이므로 효율적이다.
+        - 예를 들어, 해쉬 값은 160bit, 10분간 1024개의 거래가 발생, 1개 블록은 10분간의 거래를 묶는다고 하면
+        - 1개 블록 = (1024+512+64+32+16+8+4+2+1)*160bit = 약 41KB
+        - 1시간 = 6 * 41KB
+        - 1일 = 24 * 6 * 41KB
+        - 1년 = 365 * 24 * 6 * 41KB
+        - 10년 = 10 * 365 * 24 * 6 * 41KB = **21.5496GB**
+
+![](30.png){: width="400" height="" }
+
+### Bitcoin의 안전성
+
+> 거래 내역에 대한 작업 증명(proof of work) 생성이 안전성 보장
+ 
+- 가장 긴 blockchain이 가장 정확
+    - ‘길다’는 표현의 의미는 ‘몇 개의 블럭 해쉬를 포함하는 블럭이나?’ 이다.
+    - 실시간으로 모든 블락이 공유되는 상황
+    - 가장 긴 blockchain을 기준으로 새로운 blockchain 생성
+- 해커가 과거 거래 내역을 위조하는 것은 불가능
+    - 과거 거래내역을 포함하는 블록부터 **이후에 모든 블록을 새로 위조해야 함**
+        - 정확한 Blockchain이 계속해서 갱신
+    - 공격 블록부터 이후 모든 블록 추가 후에 최신블록까지 따라잡을 수 없음
+- 정확히 말하면 블럭을 만들려면 작업증명(채굴)을 해야하는데, 빠른속도로 현재 정상적으로 만들어지는 체인보다 빠르게 만드는게 불가능하다는 의미이다.
+
+
+![](31.png){: width="400" height="" }
+_IEEE Spectrum(2015.7)_
 
 <br>
 
