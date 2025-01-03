@@ -135,13 +135,17 @@ _(왼) 첨점이 존재 (오) 교차점이 존재_
 ### 모듈러 연산
 
 - (다른 암호 알고리즘과 비슷하게) Finite field 상의 타원곡선을 사용한다.
-  - 특히 유한체 중 소수체(prime field)와 이진 확장체(binary extension field)를 사용
   - 컴퓨터에서는 실수(real number)와 음수, 무한값 등을 다루기 힘들다. 때문에 모듈러 연산이 팔방미인
-- 모듈러 $p$ 타원 곡선 방정식
-    - $y^2 \mod p = (x^3+ax+b) \mod p$, $p$는 소수
+- Elliptic Curves in Real domain
+    - $\lbrace (x, y) \in \mathbb{R}^2 \vert y^2 = x^3+ax+b, 4a^3+27b^2 \ne 0 \rbrace \cup \lbrace 0 \rbrace$
+- Elliptic Curves in Finite domain
+    - $\lbrace (x, y) \in (\mathbb{F}_p)^2 \vert y^2 = x^3+ax+b \mod p, 4a^3+27b^2 \ne 0 \mod p \rbrace \cup \lbrace 0 \rbrace$, $p$는 소수
 - 모듈로 $p$ 타원 곡선
     - 동일점 덧셈과 스칼라 곱셈 연산에 대해 GF($2^n$) [갈로아 필드]
     - 유한성, 폐쇄성, 결합성, 교환성, 분산성, 항등원, 역원이 모두 만족한다.
+
+![](38.png){: width="500" height="" }
+_Finite domain에서 Elliptic Curves가 표현하는 Rational points(왼쪽 위부터 시계방향으로 p=19, 97, 127, 487)_
 
 <br>
 
@@ -162,13 +166,13 @@ _(왼) 첨점이 존재 (오) 교차점이 존재_
 
 - 같은 보안 강도를 가질 때 대칭키, RSA, ECC의 key size 비교(NIST)
 
-|Symmetric| RSA | ECC |
-|---| --- | --- |
-|80| 1024 | 160 |
-|112| 2048 | 224 |
-|128| 3072 | 256 |
-|192| 7680 | 384 |
-|256| 15368 | 512 |
+| Symmetric | RSA | ECC |
+| --- | --- | --- |
+| 80 | 1024 | 160 |
+| 112 | 2048 | 224 |
+| 128 | 3072 | 256 |
+| 192 | 7680 | 384 |
+| 256 | 15368 | 512 |
 
 ### 응용
 
@@ -200,50 +204,63 @@ _(왼) 첨점이 존재 (오) 교차점이 존재_
     - $k$G ( = 점 $K$)
     - 어떤 타원곡선인지, p, G 등 다른 파라미터도 사실상 모두 공개된 정보
 
-### 타원 곡선 디지털 서명
+### Elliptical Curve Digital Signature Algorithm(ECDSA)
+- Senario
+    - Alice가 Bob에게 메시지를 보낼 때 sign 수행 (using private key $d_A$)
+    - 이때 hash 함수를 메시지 m에 적용시켜 digest message를 만듦 (hash(m)=$z$)
+    - Bob은 메시지 검증 수행 (using public key $H_A$)
+    - $H_A=d_AG$
+    - 타원곡선 파라미터, $G, n, H_A$는 모두 public information. $d_A$만 private.
+- Signing process (Alice)
+    1. random interger k in $\lbrace 1, \dots, n-1\rbrace$ ($n$ is the subgroup order)
+    2. Calculate the point $P=kG$ ($G$ is base point of the subgroup)
+    3. Calculate the number $r=x_p \mod n$ ($x_p$ is the $x$ coordinate of $P$)
+    4. If $r=0$, then choose another $k$ and try again
+    5. Calculate $s=k^{-1}(z+rd_A) \mod n$
+    6. If $s=0$, then choose another $k$ and try again
+    - The pair (r, s) is the signature
+- Verifying signature(Bob) : 현재 Bob은 r, s, z, H_A를 알고있는 상황
+    1. Calculate the interger $u_1=s^{-1}z \mod n$
+    2. Calculate the interger $u_2=s^{-1}r \mod n$
+    3. Calculate the point $P=u_1G+u_2H_A$
+    4. The signature is valid only if $r=x_p \mod n$ 
 
-- $k$=개인키, $r$=비밀의 큰 수, $k$G= 공개키, $m$=메시지
-    - hash($m$, $r$G)$k$G+$r$G
-        - 분배법칙에 의해 **(hash($m$, $r$G)$k+r$)G**
-    - $r$은 개인키와 더불어 비밀키임(난이도를 높이기 위해 사용)
-- $R$=$r$G, $s$=hash($m$, $r$G)$k+r$, $K=k$G
-    - hash($m$, $R$)$K$+$R$=$s$G
-- 메시지 $m$의 서명
-    - $R$과 $s$
-    - 전송 데이터: $m, R, s$
-- 서명 확인
-    - 수신 메시지 : $m’, R, s$
-    - **hash($m’$, $R$)$K+R$ = $s$G가 성립하면 서명 확인 성공**
+#### Correctness
 
-#### 안전성
+$$
+P=u_1G+u_2H_A=u_1G+u_2d_AG=(u_1+u_2d_A)G
+$$
 
-- 서명 위조의 어려움
-    - R’ = rG, ECDLP의 어려움으로 r 추론 불가
-    - s’ = hash(m, rG)k+r, k와 r 추론 불가
-- 서명 공개와 개인키 보호
-    - k=(s-r) / hash(m, R)
-    - r 추론 불가하기 때문에 k를 알아낼 수 없다.
-- RSA보다 키 사이즈가 작기 때문에 성능이 좋다.
+$$
+P=(u_1+u_2d_A)G=(s^{-1}z+s^{-1}rd_a)G=s^{-1}(z+rd_A)G
+$$
 
-### 타원 곡선 Diffie-Hellman(ECDH)
+$s=k^{-1}(z+rd_A) \mod n$이므로 $k=s^{-1}(z+rd_A) \mod n$이다. <br>
+따라서 $P=s^{-1}(z+rd_A)G=kG$
+
+### Elliptical Curve Diffie-Hellman(ECDH)
 
 - 전통적인 Diffie-Hellman의 문제점
     - 모듈러 지수 연산을 통해 공개키를 만들기 때문에 그 과정에서 시간이 오래 걸린다.
     - 키의 크기가 크다.
     - 모듈러 지수 연산 대신에 타원 곡선을 사용하자!
-- 사용자 A, 공개키를 B에게 전송
+- Setup: all users agree on global parameters (public info)
+    - Prime number $p$, Elliptic curve $a, b$, Generator point $G(X_G, Y_G)$
+    - subgroup order $n$, coprime $h(=N/n)$ ($N$ is elements number in Finite field)
+- 사용자 A
     - 개인키: $k_A$
-    - 공개키: $K^+_A=k_AG$
-- 사용자 B, 공개키를 A에게 전송
+    - 공개키: $K^+_A=k_AG$ → B에게 전송
+- 사용자 B
     - 개인키: $k_B$
-    - 공개키: $K^+_B=k_BG$
+    - 공개키: $K^+_B=k_BG$ → A에게 전송
 - 사용자 A의 대칭키
-    - $k_AK_B^+ = K_{AB}$
+    - $k_AK_B^+=K_{AB}\mod p$
 - 사용자 B의 대칭키
-    - $k_BK_A^+=K_{AB}$
+    - $k_BK_A^+=K_{AB}\mod p$
 - 증명
-    - $k_AK_B^+=k_A(k_BG)=k_B(k_AG)=k_BK_A^+$
+    - $k_AK_B^+=k_A(k_BG)=k_B(k_AG)=k_BK_A^+ \mod p$
 
 
 ### Reference
-[공개키암호2_타원곡선암호(ECC)(박승철 교수)](https://www.youtube.com/watch?v=xtkDTtf_efs)
+[공개키암호2_타원곡선암호(ECC)(박승철 교수)](https://www.youtube.com/watch?v=xtkDTtf_efs)<br>
+[Application of Elliptical Curve Cryptography (ECC): ECDH & ECDSA(유호영 교수)](https://www.youtube.com/watch?v=HXbC03ZP7hA)
